@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>S&C Form</title>
+        <link rel="manifest" href="manifest.json">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <style>
+            body {
+                background-color: #121212;
+                color: white;
+            }
+            .form-container {
+                margin: 20px;
+                padding: 20px;
+                border-radius: 8px;
+                background-color: #1e1e1e;
+            }
+            .form-section-title {
+                margin-bottom: 15px;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+            .form-control, .form-select {
+                background-color: #2c2c2c;
+                color: white;
+                border: 1px solid #444;
+            }
+            .form-control:focus, .form-select:focus {
+                background-color: #2c2c2c;
+                color: white;
+                border: 1px solid #555;
+            }
+            #generateReportBtn {
+                background-color: #6c757d; /* szary kolor */
+                border-color: #6c757d;
+            }
+
+            #generateReportBtn:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+            .form-section-title {
+                letter-spacing: 5px; /* Zwiększa odstęp między literami */
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Cień tekstu */
+                font-weight: bold; /* Pogrubienie tekstu */
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="form-container">
+                <h1 class="form-section-title text-center">STRENGHT AND CONDITIONING</h1>
+                <form id="scForm">
+                    <!-- DATE, TIME, DURATION, WEEK, DAY -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="date" class="form-label">DATE</label>
+                            <input type="date" id="date" name="date" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="time" class="form-label">TIME</label>
+                            <input type="time" id="time" name="time" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="week" class="form-label">WEEK</label>
+                            <input type="number" id="week" name="week" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="day" class="form-label">DAY</label>
+                            <select id="day" name="day" class="form-select" required>
+                                <option value="LIGHT">LIGHT</option>
+                                <option value="MEDIUM">MEDIUM</option>
+                                <option value="HEAVY">HEAVY</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="duration" class="form-label">DURATION</label>
+                            <input type="number" id="duration" name="duration" class="form-control" value="25" required>
+                        </div>
+                    </div>
+    
+                    <!-- DMP + WEIGHT -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="dmp" class="form-label">DMP</label>
+                            <input type="number" id="dmp" name="dmp" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="weightDMP" class="form-label">WEIGHT</label>
+                            <input type="number" id="weightDMP" name="weightDMP" class="form-control" required>
+                        </div>
+                    </div>
+    
+                    <!-- DFSQ + WEIGHT -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="dfsq" class="form-label">DFSQ</label>
+                            <input type="number" id="dfsq" name="dfsq" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="weightDFSQ" class="form-label">WEIGHT</label>
+                            <input type="number" id="weightDFSQ" name="weightDFSQ" class="form-control" required>
+                        </div>
+                    </div>
+    
+                    <!-- BALISTIC, REPS, WEIGHT -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="balistic" class="form-label">BALISTIC</label>
+                            <select id="balistic" name="balistic" class="form-select" required>
+                                <option value="SNATCH">SNATCH</option>
+                                <option value="ohs">OHS</option>
+                                <option value="2hs">2HS</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="weightBalistic" class="form-label">WEIGHT</label>
+                            <input type="number" id="weightBalistic" name="weightBalistic" class="form-control" required>
+                        </div>
+                        <div class="col">
+                            <label for="reps" class="form-label">REPS</label>
+                            <input type="number" id="reps" name="reps" class="form-control" required>
+                        </div>
+                    </div>
+    
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <!-- Generate Report Button -->
+                    <div class="d-grid mt-3">
+                        <button id="generateReportBtn" class="btn btn-secondary" type="button">Generate Report</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    <script>
+        document.getElementById('scForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get form data
+            const formData = {
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                duration: document.getElementById('duration').value,
+                week: document.getElementById('week').value,
+                day: document.getElementById('day').value,
+                // weight: document.getElementById('weight').value,
+                dmp: document.getElementById('dmp').value,
+                weightDMP: document.getElementById('weightDMP').value,
+                dfsq: document.getElementById('dfsq').value,
+                weightDFSQ: document.getElementById('weightDFSQ').value,
+                balistic: document.getElementById('balistic').value,
+                reps: document.getElementById('reps').value,
+                weightBalistic: document.getElementById('weightBalistic').value
+            };
+
+            formData.totalDMP = formData.weightDMP * formData.dmp;
+            formData.totalDFSQ = formData.weightDFSQ * formData.dfsq;
+            formData.totalBalistic = formData.reps * formData.weightBalistic;
+            formData.total = formData.totalDMP + formData.totalDFSQ + formData.totalBalistic;
+
+            // Create JSON data
+            const jsonData = JSON.stringify(formData, null, 4);
+            const currentDate = new Date().toISOString().split('T')[0];
+            const fileName = `S&C_${currentDate}.json`;
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+
+            // Generate HTML file
+            const htmlContent = `<b>WEEK ${formData.week}</b><br>[b]${formData.day} DAY[/b]<br>DMP ${formData.dmp} reps<br>DFSQ ${formData.dfsq} reps<br>${formData.balistic} ${formData.reps} reps<br>`;
+            const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+            const htmlLink = document.createElement('a');
+            htmlLink.href = URL.createObjectURL(htmlBlob);
+            htmlLink.download = `S&C_${currentDate}.html`;
+            htmlLink.click();
+        });
+
+        document.getElementById('day').addEventListener('change', function() {
+            const dayValue = this.value; // Pobierz wybraną wartość z select
+            const durationInput = document.getElementById('duration'); // Pobierz input duration
+
+            // Ustaw odpowiednią wartość duration
+            if (dayValue === 'LIGHT') {
+                durationInput.value = 25;
+            } else if (dayValue === 'MEDIUM') {
+                durationInput.value = 27;
+            } else if (dayValue === 'HEAVY') {
+                durationInput.value = 30;
+            }
+        });
+    </script>
+    <script>
+        let db;
+
+        // Inicjalizacja IndexedDB
+        const request = indexedDB.open('S&C_Database', 1);
+        request.onerror = function(event) {
+            console.error('Database error: ' + event.target.errorCode);
+        };
+        request.onsuccess = function(event) {
+            db = event.target.result;
+        };
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            const objectStore = db.createObjectStore('workouts', { keyPath: 'id', autoIncrement: true });
+            objectStore.createIndex('week', 'week', { unique: false });
+            objectStore.createIndex('day', 'day', { unique: false });
+        };
+
+        document.getElementById('scForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Pobranie danych z formularza
+            const formData = {
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                duration: document.getElementById('duration').value,
+                week: document.getElementById('week').value,
+                day: document.getElementById('day').value,
+                dmp: document.getElementById('dmp').value,
+                weightDMP: document.getElementById('weightDMP').value,
+                dfsq: document.getElementById('dfsq').value,
+                weightDFSQ: document.getElementById('weightDFSQ').value,
+                balistic: document.getElementById('balistic').value,
+                reps: document.getElementById('reps').value,
+                weightBalistic: document.getElementById('weightBalistic').value
+            };
+
+            formData.totalDMP = formData.weightDMP * formData.dmp;
+            formData.totalDFSQ = formData.weightDFSQ * formData.dfsq;
+            formData.totalBalistic = formData.reps * formData.weightBalistic;
+            formData.total = formData.totalDMP + formData.totalDFSQ + formData.totalBalistic;
+
+            // Sprawdzenie, czy wpis dla danego tygodnia i dnia już istnieje
+            const transaction = db.transaction(['workouts'], 'readonly');
+            const objectStore = transaction.objectStore('workouts');
+            const index = objectStore.index('week');
+            const request = index.getAll(formData.week);
+
+            request.onsuccess = function(event) {
+                const existingEntries = event.target.result.filter(entry => entry.day === formData.day);
+                
+                if (existingEntries.length > 0) {
+                    // Jeśli istnieje wpis dla tego tygodnia i dnia
+                    const overwrite = confirm(`WEEK ${formData.week} ${formData.day} Day log already exists. Do you want to overwrite it?`);
+                    if (overwrite) {
+                        // Usuwanie istniejącego wpisu i dodanie nowego
+                        const deleteTransaction = db.transaction(['workouts'], 'readwrite');
+                        const deleteObjectStore = deleteTransaction.objectStore('workouts');
+                        existingEntries.forEach(entry => deleteObjectStore.delete(entry.id));
+
+                        deleteTransaction.oncomplete = function() {
+                            addData(formData);
+                        };
+                    }
+                } else {
+                    // Jeśli brak wpisu dla tego tygodnia i dnia, dodanie nowego
+                    addData(formData);
+                }
+            };
+
+            request.onerror = function(event) {
+                console.error("Error while checking for existing entries: " + event.target.errorCode);
+            };
+
+            // Funkcja dodająca dane do IndexedDB
+            function addData(formData) {
+                const transaction = db.transaction(['workouts'], 'readwrite');
+                const objectStore = transaction.objectStore('workouts');
+                objectStore.add(formData);
+
+                transaction.oncomplete = function() {
+                    alert('Data saved successfully.');
+                };
+
+                transaction.onerror = function(event) {
+                    console.error('Error while saving data: ' + event.target.errorCode);
+                };
+            }
+        });
+    </script>
+    <script>
+        // Generating report
+        document.getElementById('generateReportBtn').addEventListener('click', function() {
+            const transaction = db.transaction(['workouts'], 'readonly');
+            const objectStore = transaction.objectStore('workouts');
+            const request = objectStore.getAll();
+
+            request.onsuccess = function(event) {
+                const workouts = event.target.result;
+
+                if (workouts.length === 0) {
+                    alert('No data available to generate report.');
+                    return;
+                }
+
+                // Zdefiniowana kolejność nagłówków CSV
+                const headers = [
+                    'date', 'time', 'week', 'day', 'dmp', 'weightDMP', 'totalDMP', 
+                    'dfsq', 'weightDFSQ', 'totalDFSQ', 'balistic', 'weightBalistic', 
+                    'reps', 'totalBalistic', 'total', 'duration'
+                ];
+
+                // Tworzenie wierszy CSV
+                let csvContent = headers.join(',') + '\n';
+
+                workouts.forEach(workout => {
+                    const row = [
+                        workout.date, workout.time, workout.week, workout.day,
+                        workout.dmp, workout.weightDMP, workout.totalDMP,
+                        workout.dfsq, workout.weightDFSQ, workout.totalDFSQ,
+                        workout.balistic, workout.weightBalistic, workout.reps,
+                        workout.totalBalistic, workout.total, workout.duration
+                    ];
+                    csvContent += row.join(',') + '\n';
+                });
+
+                // Tworzenie pliku CSV i pobranie go
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const link = document.createElement('a');
+                const currentDate = new Date().toISOString().split('T')[0];
+                link.href = URL.createObjectURL(blob);
+                link.download = `workout_report_${currentDate}.csv`;
+                link.click();
+            };
+
+            request.onerror = function(event) {
+                console.error('Error fetching data from IndexedDB: ' + event.target.errorCode);
+            };
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+    
+</body>
+</html>
